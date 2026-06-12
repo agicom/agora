@@ -60,6 +60,11 @@ class Tournament extends Model
         return $this->hasMany(Registration::class);
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function isOpen(): bool
     {
         return $this->status === TournamentStatus::Open;

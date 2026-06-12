@@ -35,4 +35,14 @@ class RegistrationNotAllowed extends RuntimeException
     {
         return new self('A team member is already registered for this tournament with another team.');
     }
+
+    public static function duplicateMemberEmail(): self
+    {
+        return new self('Each team member must use a different email address.');
+    }
+
+    public static function administratorEmailCannotRegister(): self
+    {
+        return new self('An administrator email cannot be used for a public registration.');
+    }
 }
