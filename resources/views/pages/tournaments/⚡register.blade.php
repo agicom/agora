@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Tournaments\RegisterPublicTeamForTournament;
+use App\Actions\Tournaments\PublicTeamRegistrationIntake;
 use App\Exceptions\RegistrationNotAllowed;
 use App\Models\Tournament;
 use Flux\Flux;
@@ -64,8 +65,7 @@ new #[Layout('layouts.public')] #[Title('Inscription tournoi')] class extends Co
         try {
             $registerPublicTeamForTournament(
                 $this->tournament,
-                $validated['teamName'],
-                $validated['members'],
+                PublicTeamRegistrationIntake::fromValidated($validated),
             );
         } catch (RegistrationNotAllowed $exception) {
             throw ValidationException::withMessages([
