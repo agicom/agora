@@ -11,7 +11,7 @@ enum TournamentStatus: string implements HasColor, HasLabel
     case Open = 'open';
     case Closed = 'closed';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Draft => 'Brouillon',
@@ -20,7 +20,7 @@ enum TournamentStatus: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::Draft => 'gray',

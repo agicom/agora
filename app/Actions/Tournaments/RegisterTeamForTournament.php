@@ -20,6 +20,7 @@ class RegisterTeamForTournament
                 ->lockForUpdate()
                 ->firstOrFail();
 
+            /** @var Team $team */
             $team = Team::query()
                 ->with('users')
                 ->findOrFail($team->getKey());

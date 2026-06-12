@@ -68,7 +68,7 @@
             "@php artisan app:activate-flux-pro --no-interaction"
         ],
         "types:check": [
-            "phpstan analyse"
+            "phpstan analyse --memory-limit=1G"
         ],
         "test": [
             "@php artisan config:clear --ansi",

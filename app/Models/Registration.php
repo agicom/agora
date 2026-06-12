@@ -22,11 +22,17 @@ class Registration extends Model
     /** @use HasFactory<RegistrationFactory> */
     use HasFactory;
 
+    /**
+     * @return BelongsTo<Tournament, $this>
+     */
     public function tournament(): BelongsTo
     {
         return $this->belongsTo(Tournament::class);
     }
 
+    /**
+     * @return BelongsTo<Team, $this>
+     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);

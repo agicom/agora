@@ -61,11 +61,17 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    /**
+     * @return BelongsToMany<Team, $this>
+     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class)->withTimestamps();
     }
 
+    /**
+     * @return HasMany<Team, $this>
+     */
     public function captainTeams(): HasMany
     {
         return $this->hasMany(Team::class, 'captain_id');

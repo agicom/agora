@@ -55,6 +55,9 @@ class Tournament extends Model
         ];
     }
 
+    /**
+     * @return HasMany<Registration, $this>
+     */
     public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class);
