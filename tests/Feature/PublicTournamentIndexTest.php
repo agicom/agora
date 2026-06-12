@@ -33,3 +33,27 @@ test('public homepage lists tournaments and links to registration pages', functi
         ->assertSee('Inscrire une équipe')
         ->assertSee('Complet');
 });
+
+test('public homepage only lists open tournaments', function () {
+    $openTournament = Tournament::factory()->open()->create([
+        'name' => 'Friday Arena',
+        'slug' => 'friday-arena',
+    ]);
+
+    Tournament::factory()->create([
+        'name' => 'Winter Cup',
+        'slug' => 'winter-cup',
+    ]);
+
+    Tournament::factory()->closed()->create([
+        'name' => 'Strategy Masters',
+        'slug' => 'strategy-masters',
+    ]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('Friday Arena')
+        ->assertSee(route('tournaments.registrations.create', $openTournament))
+        ->assertDontSee('Winter Cup')
+        ->assertDontSee('Strategy Masters');
+});

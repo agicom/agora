@@ -4,123 +4,134 @@
         <?php $title = 'Tournois'; ?>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-[#f6f3ea] text-zinc-950 antialiased dark:bg-zinc-950 dark:text-white">
-        <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_34rem),linear-gradient(135deg,rgba(24,24,27,0.05)_25%,transparent_25%),linear-gradient(225deg,rgba(24,24,27,0.05)_25%,transparent_25%)] bg-[length:auto,32px_32px,32px_32px] dark:bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_32rem)]">
-            <header class="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
-                <a href="{{ route('home') }}" class="flex items-center gap-3" wire:navigate>
+    <body class="min-h-screen bg-zinc-50 text-zinc-950 antialiased dark:bg-zinc-950 dark:text-white">
+        <div class="min-h-screen bg-[linear-gradient(to_bottom,rgba(16,185,129,0.10),transparent_22rem)]">
+            <flux:header container class="border-b border-zinc-200/80 bg-white/85 backdrop-blur dark:border-white/10 dark:bg-zinc-950/80">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-emerald-500" wire:navigate>
                     <span class="grid size-10 place-items-center rounded-lg bg-zinc-950 text-white shadow-sm dark:bg-white dark:text-zinc-950">
                         <x-app-logo-icon class="size-6 fill-current" />
                     </span>
-                    <span>
-                        <span class="block text-sm font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">Agora</span>
-                        <span class="block text-xs font-medium text-zinc-600 dark:text-zinc-400">Tournois LAN</span>
+                    <span class="leading-tight">
+                        <span class="block text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-300">Agora</span>
+                        <span class="block text-xs text-zinc-500 dark:text-zinc-400">Tournois LAN</span>
                     </span>
                 </a>
 
-                <div class="flex items-center gap-2">
-                    <flux:button href="{{ url('/admin') }}" variant="filled" size="sm">Admin</flux:button>
-                </div>
-            </header>
+                <flux:spacer />
 
-            <main class="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-                <section class="grid gap-6 py-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:py-14">
-                    <div class="space-y-6">
+                <flux:button href="{{ url('/admin') }}" variant="ghost" size="sm">Admin</flux:button>
+            </flux:header>
+
+            <flux:main container class="space-y-8 py-8 lg:py-12">
+                <section class="grid gap-6 lg:grid-cols-[1fr_24rem] lg:items-end">
+                    <div class="space-y-5">
                         <flux:badge color="green">Inscriptions publiques</flux:badge>
 
-                        <div class="space-y-4">
-                            <h1 class="max-w-3xl text-5xl font-black leading-[0.95] tracking-normal text-zinc-950 sm:text-6xl lg:text-7xl dark:text-white">
+                        <div class="max-w-4xl space-y-4">
+                            <flux:heading size="xl" level="1" class="!text-4xl !leading-tight sm:!text-5xl lg:!text-6xl">
                                 Choisis ton tournoi, assemble ton équipe.
-                            </h1>
-                            <p class="max-w-2xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-                                Les tournois ouverts acceptent les inscriptions tant qu'il reste de la capacité. Les tournois complets ou clos restent visibles pour tester les états du parcours.
-                            </p>
+                            </flux:heading>
+
+                            <flux:text class="max-w-2xl text-base! leading-7!">
+                                Consulte les tournois disponibles, vérifie la capacité restante et inscris ton équipe en quelques minutes.
+                            </flux:text>
                         </div>
                     </div>
 
-                    <div class="grid gap-3 rounded-lg border border-zinc-950/10 bg-white/80 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5 sm:grid-cols-3">
-                        <div class="rounded-lg bg-zinc-950 p-4 text-white dark:bg-white dark:text-zinc-950">
-                            <div class="text-3xl font-black">{{ $tournaments->count() }}</div>
-                            <div class="mt-1 text-sm font-medium opacity-75">tournois</div>
+                    <flux:card class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+                        <div class="flex items-center justify-between gap-4">
+                            <flux:text>Tournois</flux:text>
+                            <span class="text-2xl font-semibold tabular-nums">{{ $tournaments->count() }}</span>
                         </div>
-                        <div class="rounded-lg bg-emerald-600 p-4 text-white">
-                            <div class="text-3xl font-black">{{ $tournaments->where('status', \App\Enums\TournamentStatus::Open)->count() }}</div>
-                            <div class="mt-1 text-sm font-medium opacity-80">ouverts</div>
+
+                        <flux:separator class="max-sm:hidden lg:block" />
+
+                        <div class="flex items-center justify-between gap-4">
+                            <flux:text>Ouverts</flux:text>
+                            <span class="text-2xl font-semibold tabular-nums text-emerald-600 dark:text-emerald-300">
+                                {{ $tournaments->where('status', \App\Enums\TournamentStatus::Open)->count() }}
+                            </span>
                         </div>
-                        <div class="rounded-lg bg-amber-300 p-4 text-zinc-950">
-                            <div class="text-3xl font-black">{{ $tournaments->sum('registrations_count') }}</div>
-                            <div class="mt-1 text-sm font-medium opacity-70">inscriptions</div>
+
+                        <flux:separator class="max-sm:hidden lg:block" />
+
+                        <div class="flex items-center justify-between gap-4">
+                            <flux:text>Inscriptions</flux:text>
+                            <span class="text-2xl font-semibold tabular-nums">{{ $tournaments->sum('registrations_count') }}</span>
                         </div>
-                    </div>
+                    </flux:card>
                 </section>
 
-                <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    @if ($tournaments->isEmpty())
-                        <div class="rounded-lg border border-dashed border-zinc-400 bg-white/70 p-8 text-center dark:border-zinc-700 dark:bg-zinc-900">
-                            <flux:heading size="xl">Aucun tournoi disponible</flux:heading>
-                            <flux:text class="mt-2">Crée un tournoi depuis le panel Filament pour alimenter cette page.</flux:text>
-                        </div>
-                    @endif
+                @if ($tournaments->isEmpty())
+                    <flux:callout
+                        color="zinc"
+                        icon="trophy"
+                        heading="Aucun tournoi disponible"
+                        text="Crée un tournoi depuis le panel Filament pour alimenter cette page."
+                    />
+                @else
+                    <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        @foreach ($tournaments as $tournament)
+                            @php
+                                $remainingCapacity = max(0, $tournament->capacity - $tournament->registrations_count);
+                                $isFull = $remainingCapacity === 0;
+                                $isOpen = $tournament->isOpen();
+                            @endphp
 
-                    @foreach ($tournaments as $tournament)
-                        @php
-                            $remainingCapacity = max(0, $tournament->capacity - $tournament->registrations_count);
-                            $isFull = $remainingCapacity === 0;
-                            $isOpen = $tournament->isOpen();
-                        @endphp
+                            <flux:card wire:key="tournament-{{ $tournament->id }}" class="flex min-h-80 flex-col justify-between gap-6 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg dark:hover:border-emerald-500/40">
+                                <div class="space-y-5">
+                                    <div class="flex items-start justify-between gap-4">
+                                        @if ($isFull)
+                                            <flux:badge color="red">Complet</flux:badge>
+                                        @elseif ($isOpen)
+                                            <flux:badge color="green">Ouvert</flux:badge>
+                                        @else
+                                            <flux:badge color="zinc">{{ $tournament->status->getLabel() }}</flux:badge>
+                                        @endif
 
-                        <article class="group flex min-h-80 flex-col justify-between rounded-lg border border-zinc-950/10 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-zinc-950/30 hover:shadow-xl dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/25">
-                            <div class="space-y-5">
-                                <div class="flex items-start justify-between gap-4">
-                                    @if ($isFull)
-                                        <flux:badge color="red">Complet</flux:badge>
-                                    @elseif ($isOpen)
-                                        <flux:badge color="green">Ouvert</flux:badge>
-                                    @else
-                                        <flux:badge color="zinc">{{ $tournament->status->getLabel() }}</flux:badge>
-                                    @endif
-
-                                    <span class="text-right text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
-                                        {{ $tournament->starts_at?->format('d/m') ?? 'À venir' }}
-                                    </span>
-                                </div>
-
-                                <div class="space-y-3">
-                                    <h2 class="text-2xl font-black tracking-normal">{{ $tournament->name }}</h2>
-                                    <p class="line-clamp-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                                        {{ $tournament->description ?: 'Aucune description pour le moment.' }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="mt-8 space-y-5">
-                                <div class="grid grid-cols-3 gap-2 text-sm">
-                                    <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
-                                        <div class="font-black">{{ $remainingCapacity }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">places</div>
+                                        <span class="text-sm font-medium tabular-nums text-zinc-500 dark:text-zinc-400">
+                                            {{ $tournament->starts_at?->format('d/m/Y') ?? 'À venir' }}
+                                        </span>
                                     </div>
-                                    <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
-                                        <div class="font-black">{{ $tournament->team_min_size }}-{{ $tournament->team_max_size }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">équipe</div>
-                                    </div>
-                                    <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
-                                        <div class="font-black">{{ $tournament->registrations_count }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">inscrites</div>
+
+                                    <div class="space-y-3">
+                                        <flux:heading size="lg" level="2">{{ $tournament->name }}</flux:heading>
+                                        <flux:text class="line-clamp-3 leading-6">
+                                            {{ $tournament->description ?: 'Aucune description pour le moment.' }}
+                                        </flux:text>
                                     </div>
                                 </div>
 
-                                <flux:button
-                                    href="{{ route('tournaments.registrations.create', $tournament) }}"
-                                    variant="{{ $isOpen && ! $isFull ? 'primary' : 'filled' }}"
-                                    class="w-full"
-                                    wire:navigate
-                                >
-                                    {{ $isOpen && ! $isFull ? 'Inscrire une équipe' : 'Voir le tournoi' }}
-                                </flux:button>
-                            </div>
-                        </article>
-                    @endforeach
-                </section>
-            </main>
+                                <div class="space-y-5">
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
+                                            <div class="text-lg font-semibold tabular-nums">{{ $remainingCapacity }}</div>
+                                            <flux:text size="sm">places</flux:text>
+                                        </div>
+                                        <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
+                                            <div class="text-lg font-semibold tabular-nums">{{ $tournament->team_min_size }}-{{ $tournament->team_max_size }}</div>
+                                            <flux:text size="sm">équipe</flux:text>
+                                        </div>
+                                        <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
+                                            <div class="text-lg font-semibold tabular-nums">{{ $tournament->registrations_count }}</div>
+                                            <flux:text size="sm">inscrites</flux:text>
+                                        </div>
+                                    </div>
+
+                                    <flux:button
+                                        href="{{ route('tournaments.registrations.create', $tournament) }}"
+                                        variant="{{ $isOpen && ! $isFull ? 'primary' : 'filled' }}"
+                                        class="w-full"
+                                        wire:navigate
+                                    >
+                                        {{ $isOpen && ! $isFull ? 'Inscrire une équipe' : 'Voir le tournoi' }}
+                                    </flux:button>
+                                </div>
+                            </flux:card>
+                        @endforeach
+                    </section>
+                @endif
+            </flux:main>
         </div>
 
         @fluxScripts

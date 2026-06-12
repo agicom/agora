@@ -11,7 +11,7 @@ Le projet couvre deux parcours principaux :
 
 - Laravel 13
 - Livewire 4, Alpine.js, Tailwind CSS 4
-- Flux UI 2
+- Flux UI 2 / Flux Pro
 - Filament 5
 - PostgreSQL
 - Pest 4
@@ -39,6 +39,16 @@ cp .env.example .env
 php artisan key:generate
 npm install
 ```
+
+Flux Pro utilise le serveur Composer privé de Flux. Renseigner localement `FLUX_USERNAME`
+et `FLUX_LICENSE_KEY` dans `.env`, puis activer la licence :
+
+```bash
+composer run flux:activate
+composer require livewire/flux-pro
+```
+
+La commande crée `auth.json`, volontairement ignoré par Git.
 
 3. Migrer et charger les données de démo :
 

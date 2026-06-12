@@ -20,6 +20,33 @@ test('public registration page renders from the tournament slug', function () {
         ->assertSee('Inscrire une équipe');
 });
 
+test('public registration inputs do not sync on blur', function () {
+    $tournament = Tournament::factory()->open()->create([
+        'capacity' => 8,
+        'team_min_size' => 1,
+        'team_max_size' => 4,
+    ]);
+
+    $this->get(route('tournaments.registrations.create', $tournament))
+        ->assertOk()
+        ->assertSee('wire:model="teamName"', false)
+        ->assertSee('wire:model="members.0.name"', false)
+        ->assertSee('wire:model="members.0.email"', false)
+        ->assertDontSee('wire:model.live.blur', false);
+});
+
+test('public registration submit loading state only targets submit', function () {
+    $tournament = Tournament::factory()->open()->create([
+        'capacity' => 8,
+        'team_min_size' => 1,
+        'team_max_size' => 4,
+    ]);
+
+    $this->get(route('tournaments.registrations.create', $tournament))
+        ->assertOk()
+        ->assertSee('wire:target="submit"', false);
+});
+
 test('public users can submit a valid team registration', function () {
     $tournament = Tournament::factory()->open()->create([
         'capacity' => 8,

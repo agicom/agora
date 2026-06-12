@@ -64,6 +64,9 @@
             "Composer\\Config::disableProcessTimeout",
             "@test"
         ],
+        "flux:activate": [
+            "@php artisan app:activate-flux-pro --no-interaction"
+        ],
         "types:check": [
             "phpstan analyse"
         ],
