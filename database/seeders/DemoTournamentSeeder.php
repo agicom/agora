@@ -24,7 +24,7 @@ class DemoTournamentSeeder extends Seeder
         $fridayArena = $this->tournament([
             'name' => 'Friday Arena',
             'slug' => 'friday-arena',
-            'description' => 'Tournoi principal de la soiree, ouvert aux equipes de deux a quatre joueurs.',
+            'description' => 'Tournoi principal de la soirée, ouvert aux équipes de deux à quatre joueurs.',
             'starts_at' => Carbon::now()->addDays(10)->setTime(20, 0),
             'status' => TournamentStatus::Open,
             'capacity' => 8,
@@ -35,7 +35,7 @@ class DemoTournamentSeeder extends Seeder
         $soloSprint = $this->tournament([
             'name' => 'Solo Sprint',
             'slug' => 'solo-sprint',
-            'description' => 'Format court en solo, volontairement complet pour demontrer le blocage public.',
+            'description' => 'Format court en solo, volontairement complet pour démontrer le blocage public.',
             'starts_at' => Carbon::now()->addDays(17)->setTime(18, 30),
             'status' => TournamentStatus::Open,
             'capacity' => 2,
@@ -46,7 +46,7 @@ class DemoTournamentSeeder extends Seeder
         $strategyMasters = $this->tournament([
             'name' => 'Strategy Masters',
             'slug' => 'strategy-masters',
-            'description' => 'Tournoi clos par l administration, visible en back-office.',
+            'description' => 'Tournoi clos par l’administration, visible en back-office.',
             'starts_at' => Carbon::now()->addDays(24)->setTime(21, 0),
             'status' => TournamentStatus::Open,
             'capacity' => 16,
@@ -57,7 +57,7 @@ class DemoTournamentSeeder extends Seeder
         $this->tournament([
             'name' => 'Winter Cup',
             'slug' => 'winter-cup',
-            'description' => 'Tournoi en preparation, conserve en brouillon.',
+            'description' => 'Tournoi en préparation, conservé en brouillon.',
             'starts_at' => Carbon::now()->addMonth()->setTime(19, 0),
             'status' => TournamentStatus::Draft,
             'capacity' => 12,

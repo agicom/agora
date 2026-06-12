@@ -17,7 +17,7 @@ test('public registration page renders from the tournament slug', function () {
     $this->get(route('tournaments.registrations.create', $tournament))
         ->assertOk()
         ->assertSee('Friday Arena')
-        ->assertSee('Inscrire une equipe');
+        ->assertSee('Inscrire une équipe');
 });
 
 test('public users can submit a valid team registration', function () {
@@ -36,7 +36,7 @@ test('public users can submit a valid team registration', function () {
         ->set('members.1.email', 'sam@example.com')
         ->call('submit')
         ->assertSet('registered', true)
-        ->assertSee('Equipe inscrite');
+        ->assertSee('Équipe inscrite');
 
     expect(Registration::query()->whereBelongsTo($tournament)->count())->toBe(1)
         ->and(User::query()->whereIn('email', ['nina@example.com', 'sam@example.com'])->count())->toBe(2);
@@ -71,5 +71,5 @@ test('public registration blocks full tournaments', function () {
 
     Livewire::test('pages::tournaments.register', ['tournament' => $tournament])
         ->assertSee('Les inscriptions ne sont pas disponibles')
-        ->assertDontSee('Confirmer l inscription');
+        ->assertDontSee('Confirmer l’inscription');
 });
