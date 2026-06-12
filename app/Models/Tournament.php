@@ -64,4 +64,19 @@ class Tournament extends Model
     {
         return $this->status === TournamentStatus::Open;
     }
+
+    public function registeredTeamsCount(): int
+    {
+        return $this->registrations()->count();
+    }
+
+    public function remainingCapacity(): int
+    {
+        return max(0, $this->capacity - $this->registeredTeamsCount());
+    }
+
+    public function isFull(): bool
+    {
+        return $this->remainingCapacity() === 0;
+    }
 }
