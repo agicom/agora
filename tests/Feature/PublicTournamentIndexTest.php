@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Tournaments\PublicTournamentFeed;
 use App\Models\Registration;
 use App\Models\Tournament;
 
@@ -26,6 +27,7 @@ test('public homepage lists tournaments and links to registration pages', functi
 
     $this->get(route('home'))
         ->assertOk()
+        ->assertViewHas('feed', fn (PublicTournamentFeed $feed): bool => $feed->tournamentCount() === 2)
         ->assertSee('Choisis ton tournoi')
         ->assertSee('Friday Arena')
         ->assertSee('Solo Sprint')

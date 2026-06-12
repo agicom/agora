@@ -41,7 +41,7 @@
                     <flux:card class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
                         <div class="flex items-center justify-between gap-4">
                             <flux:text>Tournois</flux:text>
-                            <span class="text-2xl font-semibold tabular-nums">{{ $tournaments->count() }}</span>
+                            <span class="text-2xl font-semibold tabular-nums">{{ $feed->tournamentCount() }}</span>
                         </div>
 
                         <flux:separator class="max-sm:hidden lg:block" />
@@ -49,7 +49,7 @@
                         <div class="flex items-center justify-between gap-4">
                             <flux:text>Ouverts</flux:text>
                             <span class="text-2xl font-semibold tabular-nums text-emerald-600 dark:text-emerald-300">
-                                {{ $tournaments->where('status', \App\Enums\TournamentStatus::Open)->count() }}
+                                {{ $feed->openCount }}
                             </span>
                         </div>
 
@@ -57,12 +57,12 @@
 
                         <div class="flex items-center justify-between gap-4">
                             <flux:text>Inscriptions</flux:text>
-                            <span class="text-2xl font-semibold tabular-nums">{{ $tournaments->sum('registrations_count') }}</span>
+                            <span class="text-2xl font-semibold tabular-nums">{{ $feed->registrationsCount }}</span>
                         </div>
                     </flux:card>
                 </section>
 
-                @if ($tournaments->isEmpty())
+                @if ($feed->isEmpty())
                     <flux:callout
                         color="zinc"
                         icon="trophy"
@@ -71,33 +71,21 @@
                     />
                 @else
                     <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        @foreach ($tournaments as $tournament)
-                            @php
-                                $remainingCapacity = max(0, $tournament->capacity - $tournament->registrations_count);
-                                $isFull = $remainingCapacity === 0;
-                                $isOpen = $tournament->isOpen();
-                            @endphp
-
-                            <flux:card wire:key="tournament-{{ $tournament->id }}" class="flex min-h-80 flex-col justify-between gap-6 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg dark:hover:border-emerald-500/40">
+                        @foreach ($feed->cards as $card)
+                            <flux:card wire:key="tournament-{{ $card->id }}" class="flex min-h-80 flex-col justify-between gap-6 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg dark:hover:border-emerald-500/40">
                                 <div class="space-y-5">
                                     <div class="flex items-start justify-between gap-4">
-                                        @if ($isFull)
-                                            <flux:badge color="red">Complet</flux:badge>
-                                        @elseif ($isOpen)
-                                            <flux:badge color="green">Ouvert</flux:badge>
-                                        @else
-                                            <flux:badge color="zinc">{{ $tournament->status->getLabel() }}</flux:badge>
-                                        @endif
+                                        <flux:badge :color="$card->statusColor">{{ $card->statusLabel }}</flux:badge>
 
                                         <span class="text-sm font-medium tabular-nums text-zinc-500 dark:text-zinc-400">
-                                            {{ $tournament->starts_at?->format('d/m/Y') ?? 'À venir' }}
+                                            {{ $card->startsAt?->format('d/m/Y') ?? 'À venir' }}
                                         </span>
                                     </div>
 
                                     <div class="space-y-3">
-                                        <flux:heading size="lg" level="2">{{ $tournament->name }}</flux:heading>
+                                        <flux:heading size="lg" level="2">{{ $card->name }}</flux:heading>
                                         <flux:text class="line-clamp-3 leading-6">
-                                            {{ $tournament->description ?: 'Aucune description pour le moment.' }}
+                                            {{ $card->description }}
                                         </flux:text>
                                     </div>
                                 </div>
@@ -105,26 +93,26 @@
                                 <div class="space-y-5">
                                     <div class="grid grid-cols-3 gap-2">
                                         <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
-                                            <div class="text-lg font-semibold tabular-nums">{{ $remainingCapacity }}</div>
+                                            <div class="text-lg font-semibold tabular-nums">{{ $card->remainingCapacity }}</div>
                                             <flux:text size="sm">places</flux:text>
                                         </div>
                                         <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
-                                            <div class="text-lg font-semibold tabular-nums">{{ $tournament->team_min_size }}-{{ $tournament->team_max_size }}</div>
+                                            <div class="text-lg font-semibold tabular-nums">{{ $card->teamMinSize }}-{{ $card->teamMaxSize }}</div>
                                             <flux:text size="sm">équipe</flux:text>
                                         </div>
                                         <div class="rounded-lg bg-zinc-100 p-3 dark:bg-white/10">
-                                            <div class="text-lg font-semibold tabular-nums">{{ $tournament->registrations_count }}</div>
+                                            <div class="text-lg font-semibold tabular-nums">{{ $card->registrationsCount }}</div>
                                             <flux:text size="sm">inscrites</flux:text>
                                         </div>
                                     </div>
 
                                     <flux:button
-                                        href="{{ route('tournaments.registrations.create', $tournament) }}"
-                                        variant="{{ $isOpen && ! $isFull ? 'primary' : 'filled' }}"
+                                        href="{{ $card->registrationUrl }}"
+                                        variant="{{ $card->callToActionVariant }}"
                                         class="w-full"
                                         wire:navigate
                                     >
-                                        {{ $isOpen && ! $isFull ? 'Inscrire une équipe' : 'Voir le tournoi' }}
+                                        {{ $card->callToActionLabel }}
                                     </flux:button>
                                 </div>
                             </flux:card>

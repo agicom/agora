@@ -1,16 +1,11 @@
 <?php
 
-use App\Enums\TournamentStatus;
-use App\Models\Tournament;
+use App\Actions\Tournaments\ListPublicTournamentFeed;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', function (ListPublicTournamentFeed $listPublicTournamentFeed) {
     return view('welcome', [
-        'tournaments' => Tournament::query()
-            ->where('status', TournamentStatus::Open)
-            ->withCount('registrations')
-            ->orderByRaw('starts_at is null, starts_at asc')
-            ->get(),
+        'feed' => $listPublicTournamentFeed(),
     ]);
 })->name('home');
 
